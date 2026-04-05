@@ -4,7 +4,7 @@ import {createApi,fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 export const apiSlice = createApi({
     reducerPath:'api',
     baseQuery:fetchBaseQuery({
-        baseUrl:'http://51.81.22.42:3000/api',
+        baseUrl:'https://calender-4ggz.vercel.app/api',
     }),
     endpoints:(builder)=>({
         getSessions:builder.query({
