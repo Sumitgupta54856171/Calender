@@ -4,7 +4,7 @@ import {createApi,fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 export const apiSlice = createApi({
     reducerPath:'api',
     baseQuery:fetchBaseQuery({
-        baseUrl:'https://deep-rings-stick.loca.lt/api',
+        baseUrl:'http://51.81.22.42:3000/api',
     }),
     endpoints:(builder)=>({
         getSessions:builder.query({
