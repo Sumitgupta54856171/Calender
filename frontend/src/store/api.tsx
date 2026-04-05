@@ -18,10 +18,23 @@ export const apiSlice = createApi({
             }),
         }),
         getSessionbyDate:builder.query({
-            query:({organizationId,date})=>`/sessions/${organizationId}?date=${date}`,
+            query:({organizationId,date})=>`/sessions/${organizationId}/${date}`,
+        }),
+        rescheduleSession:builder.mutation({
+            query:(rescheduleData)=>({
+                url:'/sessions/reschedule',
+                method:'PUT',
+                body:rescheduleData,
+            }),
+        }),
+        bill:builder.query({
+            query:(organizationId)=>`/bills/${organizationId}`,
+        }),
+        adjustments:builder.query({
+            query:(organizationId)=>`/adjustments/${organizationId}`,
         }),
       
 })
 });
 
-export const {useGetSessionsQuery,useCreateSessionMutation,useGetSessionbyDateQuery} = apiSlice;
+export const {useGetSessionsQuery,useCreateSessionMutation,useGetSessionbyDateQuery,useRescheduleSessionMutation,useAdjustmentsQuery,useBillQuery} = apiSlice;

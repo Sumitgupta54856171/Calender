@@ -1,5 +1,6 @@
 const Session = require('../model/session'); // Session model import karna zaroori hai
-const Invoice = require('../model/invoice'); // Invoice model import karna 
+const Invoice = require('../model/invoice'); // Invoice model import karna
+const Adjustment = require('../model/adjustment'); // Adjustment model import karna zaroori hai
 const mongoose = require('mongoose');
 
 const createSessionAndBill = async (req, res, next) => {
@@ -95,9 +96,53 @@ const createSessionAndBill = async (req, res, next) => {
 };
 
 const getbills = async(req,res,next)=>{
-    
+    try {
+    const { organizationId } = req.params;
+
+    if (!organizationId) {
+      return res.status(400).json({ success: false, message: "organizationId is required" });
+    }
+
+    // Us organization ke saare invoices fetch karo
+    const invoices = await Invoice.find({ organization_id: organizationId })
+      .sort({ createdAt: -1 }); // Naye bills sabse upar
+
+    res.status(200).json({
+      success: true,
+      count: invoices.length,
+      data: invoices
+    });
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+const getAdjustments = async (req,res)=>{
+    try {
+    const { organizationId } = req.params; // URL se org id nikalenge
+
+    if (!organizationId) {
+      return res.status(400).json({ success: false, message: "organizationId is required" });
+    }
+
+    // Organization ke saare adjustments dhoondo aur naye wale pehle dikhao
+    const adjustments = await Adjustment.find({ organization_id: organizationId })
+      .populate('session_id', 'tutor_name student_name session_date') // Session ka data
+      .populate('invoic_id', 'status total_amount') // Purane Invoice ka data
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      count: adjustments.length,
+      data: adjustments
+    });
+
+  } catch (error) {
+    next(error);
+  }
 }
 
 module.exports = {
-  createSessionAndBill
+  createSessionAndBill,getbills,getAdjustments
 };

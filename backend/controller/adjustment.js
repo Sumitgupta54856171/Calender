@@ -13,8 +13,34 @@ const resheduleBilledSession =async (req, res, next) => {
       new_end_time 
     } = req.body;
 
+    // Log received values for debugging
+    console.log("Reschedule request received:", {
+      session_id,
+      new_session_date,
+      new_start_time,
+      new_end_time
+    });
+
+    // Validate datetime strings
+    if (!new_start_time || !new_end_time) {
+      return res.status(400).json({ success: false, message: "Start time and end time are required!" });
+    }
+
     const newStartTimeDate = new Date(new_start_time);
     const newEndTimeDate = new Date(new_end_time);
+
+    // Validate that dates are valid
+    if (isNaN(newStartTimeDate.getTime()) || isNaN(newEndTimeDate.getTime())) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Invalid date format. Use ISO 8601 format (e.g., 2026-04-22T15:56:00)" 
+      });
+    }
+
+    console.log("Parsed dates:", {
+      newStartTimeDate,
+      newEndTimeDate
+    });
 
     // 1. Fetch Original Session
     const originalSession = await Session.findById(session_id);

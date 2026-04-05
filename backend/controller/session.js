@@ -29,10 +29,10 @@ const getSessionsByDate = async (req, res, next) => {
   try {
     // Frontend se organization_id aur date (optional) lenge
     // URL example: /api/sessions?organization_id=123&date=2026-04-21
-    const { organization_id, date } = req.query;
+    const { organizationId, date } = req.params;
 
-    if (!organization_id) {
-      return res.status(400).json({ success: false, message: "organization_id is required" });
+    if (!organizationId) {
+      return res.status(400).json({ success: false, message: "organizationId is required" });
     }
 
     // 1. Target Date Set Karo
@@ -48,8 +48,8 @@ const getSessionsByDate = async (req, res, next) => {
     endOfDay.setHours(23, 59, 59, 999);
 
     // 4. Database Query ($gte aur $lte ka use karke)
-    const sessions = await Session.find({
-      organization_id: organization_id,
+    const sessions = await session.find({
+      organization_id: organizationId,
       session_date: {
         $gte: startOfDay,
         $lte: endOfDay
@@ -63,10 +63,11 @@ const getSessionsByDate = async (req, res, next) => {
       message: `Fetched sessions for ${startOfDay.toDateString()}`,
       data: sessions
     });
+    console.log(`Fetched ${sessions.length} sessions for organization ID ${organizationId} on date ${targetDate.toDateString()}`);
 
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = {getsessions}
+module.exports = {getsessions,getSessionsByDate}
