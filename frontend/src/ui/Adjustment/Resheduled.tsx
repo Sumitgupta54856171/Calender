@@ -7,9 +7,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../components/ui/pop
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, Clock, DollarSign, Zap } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, DollarSign, Zap, CheckCircle, AlertCircle } from "lucide-react";
 import { useRescheduleSessionMutation } from "../../store/api";
-import { se } from "date-fns/locale";
+import { useToast, ToastContainer } from "../../components/ui/toast";
 
 interface RescheduleProps {
   session: {
@@ -28,6 +28,7 @@ interface RescheduleProps {
 }
 
 export default function Reschedule({ session, onClose, onSuccess }: RescheduleProps) {
+  const { toasts, addToast, removeToast } = useToast();
   const [newDate, setNewDate] = useState<Date | null>(null);
   const [newStartTime, setNewStartTime] = useState("");
   const [newEndTime, setNewEndTime] = useState("");
@@ -106,61 +107,67 @@ export default function Reschedule({ session, onClose, onSuccess }: ReschedulePr
       };
 
       await rescheduleSession(rescheduleData).unwrap();
-      onSuccess();
+      addToast("Session rescheduled successfully!", "success");
+      setTimeout(() => {
+        onSuccess();
+        onClose();
+      }, 1000);
     } catch (error) {
       console.error("Reschedule failed:", error);
+      addToast("Failed to reschedule session. Please try again.", "error");
       setErrors({ submit: "Failed to reschedule session" });
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <Card className="w-full max-h-[90vh] max-w-2xl overflow-y-auto rounded-3xl border-slate-800/80 bg-slate-900/95 shadow-2xl">
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
+      <Card className="w-full max-h-[90vh] max-w-2xl overflow-y-auto rounded-3xl border-gray-200 bg-white shadow-2xl">
         
         {/* Original Session Info */}
-        <CardHeader className="border-b border-slate-800/80 bg-slate-950/50 px-6 py-5 sm:px-8">
-          <CardTitle className="flex items-center gap-2 text-2xl text-slate-50">
-            <Zap className="h-5 w-5 text-amber-400" />
+        <CardHeader className="border-b border-gray-200 bg-gray-50 px-6 py-5 sm:px-8">
+          <CardTitle className="flex items-center gap-2 text-2xl text-gray-900">
+            <Zap className="h-5 w-5 text-blue-500" />
             Reschedule Session
           </CardTitle>
-          <CardDescription className="text-slate-400">Update the session date and time</CardDescription>
+          <CardDescription className="text-gray-600">Update the session date and time</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-8 px-6 py-6 sm:px-8">
           
           {/* Original Session Details */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300">Original Session Details</h3>
-            <div className="grid gap-4 rounded-2xl border border-slate-800/50 bg-slate-800/30 p-4 sm:grid-cols-2">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-700">Original Session Details</h3>
+            <div className="grid gap-4 rounded-2xl border border-gray-200 bg-gray-50 p-4 sm:grid-cols-2">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Student</p>
-                <p className="mt-2 text-lg font-semibold text-slate-100">{session.student_name}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-600">Student</p>
+                <p className="mt-2 text-lg font-semibold text-gray-900">{session.student_name}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Tutor</p>
-                <p className="mt-2 text-lg font-semibold text-slate-100">{session.tutor_name}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-600">Tutor</p>
+                <p className="mt-2 text-lg font-semibold text-gray-900">{session.tutor_name}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Subject</p>
-                <p className="mt-2 text-lg font-semibold text-slate-100">{session.subject}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-600">Subject</p>
+                <p className="mt-2 text-lg font-semibold text-gray-900">{session.subject}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Date</p>
-                <p className="mt-2 flex items-center gap-2 text-base font-semibold text-blue-400">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-600">Date</p>
+                <p className="mt-2 flex items-center gap-2 text-base font-semibold text-blue-600">
                   <CalendarIcon className="h-4 w-4" />
                   {format(originalDate, "PPP")}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Time Slot</p>
-                <p className="mt-2 flex items-center gap-2 text-base font-semibold text-green-400">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-600">Time Slot</p>
+                <p className="mt-2 flex items-center gap-2 text-base font-semibold text-green-600">
                   <Clock className="h-4 w-4" />
                   {format(originalStartTime, "HH:mm")} - {format(originalEndTime, "HH:mm")}
                 </p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Cost</p>
-                <p className="mt-2 flex items-center gap-2 text-lg font-semibold text-yellow-400">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-600">Cost</p>
+                <p className="mt-2 flex items-center gap-2 text-lg font-semibold text-purple-600">
                   <DollarSign className="h-4 w-4" />
                   {session.session_cost}
                 </p>
@@ -168,26 +175,26 @@ export default function Reschedule({ session, onClose, onSuccess }: ReschedulePr
             </div>
           </div>
 
-          <div className="border-t border-slate-800/50" />
+          <div className="border-t border-gray-200" />
 
           {/* New Session Details Form */}
           <div className="space-y-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-300">New Session Details</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-700">New Session Details</h3>
 
             {/* New Date Picker */}
             <div>
-              <label className="mb-2 block text-sm font-semibold text-slate-200">Select New Date *</label>
+              <label className="mb-2 block text-sm font-semibold text-gray-900">Select New Date *</label>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full justify-start border-slate-700 bg-slate-800 text-left text-slate-100 hover:bg-slate-700"
+                    className="w-full justify-start border-gray-300 bg-white text-left text-gray-900 hover:bg-gray-50"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {newDate ? format(newDate, "PPP") : "Pick a date"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto border-slate-700 bg-slate-900 p-0" align="start">
+                <PopoverContent className="w-auto border-gray-200 bg-white p-0" align="start">
                   <Calendar
                     mode="single"
                     selected={newDate || undefined}
@@ -196,17 +203,17 @@ export default function Reschedule({ session, onClose, onSuccess }: ReschedulePr
                       setErrors({ ...errors, newDate: "" });
                     }}
                     disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                    className="rounded-md border-slate-700 bg-slate-900 p-3"
+                    className="rounded-md border-gray-200 bg-white p-3"
                   />
                 </PopoverContent>
               </Popover>
-              {errors.newDate && <p className="mt-1 text-sm text-red-400">{errors.newDate}</p>}
+              {errors.newDate && <p className="mt-1 text-sm text-red-600">{errors.newDate}</p>}
             </div>
 
             {/* New Time Slot */}
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-2 block text-sm font-semibold text-slate-200">Start Time *</label>
+                <label className="mb-2 block text-sm font-semibold text-gray-900">Start Time *</label>
                 <Input
                   type="time"
                   value={newStartTime}
@@ -214,12 +221,12 @@ export default function Reschedule({ session, onClose, onSuccess }: ReschedulePr
                     setNewStartTime(e.target.value);
                     setErrors({ ...errors, newStartTime: "" });
                   }}
-                  className="border-slate-700 bg-slate-800 text-slate-100 placeholder-slate-500"
+                  className="border-gray-300 bg-white text-gray-900 placeholder-gray-500"
                 />
-                {errors.newStartTime && <p className="mt-1 text-sm text-red-400">{errors.newStartTime}</p>}
+                {errors.newStartTime && <p className="mt-1 text-sm text-red-600">{errors.newStartTime}</p>}
               </div>
               <div>
-                <label className="mb-2 block text-sm font-semibold text-slate-200">End Time *</label>
+                <label className="mb-2 block text-sm font-semibold text-gray-900">End Time *</label>
                 <Input
                   type="time"
                   value={newEndTime}
@@ -227,48 +234,53 @@ export default function Reschedule({ session, onClose, onSuccess }: ReschedulePr
                     setNewEndTime(e.target.value);
                     setErrors({ ...errors, newEndTime: "" });
                   }}
-                  className="border-slate-700 bg-slate-800 text-slate-100 placeholder-slate-500"
+                  className="border-gray-300 bg-white text-gray-900 placeholder-gray-500"
                 />
-                {errors.newEndTime && <p className="mt-1 text-sm text-red-400">{errors.newEndTime}</p>}
+                {errors.newEndTime && <p className="mt-1 text-sm text-red-600">{errors.newEndTime}</p>}
               </div>
             </div>
           </div>
 
-          <div className="border-t border-slate-800/50" />
+          <div className="border-t border-gray-200" />
 
           {/* Credit Information */}
-          <div className="space-y-4 rounded-2xl border border-blue-900/50 bg-blue-900/20 p-4">
+          <div className="space-y-4 rounded-2xl border border-blue-200 bg-blue-50 p-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-wider text-blue-300">Session Cost</p>
-                <p className="mt-2 text-2xl font-bold text-blue-400">${session.session_cost}</p>
+                <p className="text-sm font-semibold uppercase tracking-wider text-blue-900">Session Cost</p>
+                <p className="mt-2 text-2xl font-bold text-blue-600">${session.session_cost}</p>
               </div>
               <div>
-                <p className="text-sm font-semibold uppercase tracking-wider text-blue-300">Credit Amount</p>
-                <p className="mt-2 text-2xl font-bold text-green-400">${session.session_cost}</p>
+                <p className="text-sm font-semibold uppercase tracking-wider text-blue-900">Credit Amount</p>
+                <p className="mt-2 text-2xl font-bold text-green-600">${session.session_cost}</p>
               </div>
             </div>
             
             {/* Credit Message */}
             <div className="mt-3 space-y-2">
               {credit > 0 ? (
-                <p className="text-sm text-green-300">
-                  ✓ A credit of <span className="font-bold text-green-400">${credit}</span> will be applied to your account based on the shorter session duration.
+                <p className="text-sm text-green-700 flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4" />
+                  <span>A credit of <span className="font-bold">${credit}</span> will be applied to your account based on the shorter session duration.</span>
                 </p>
               ) : (
-                <p className="text-sm text-slate-300">
-                  • No credit adjustment for this reschedule.
+                <p className="text-sm text-gray-700 flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>No credit adjustment for this reschedule.</span>
                 </p>
               )}
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-gray-500">
                 Credit is calculated based on the difference between original and new session duration.
               </p>
             </div>
           </div>
 
           {errors.submit && (
-            <div className="rounded-xl border border-red-900/50 bg-red-900/20 p-3">
-              <p className="text-sm text-red-400">{errors.submit}</p>
+            <div className="rounded-xl border border-red-200 bg-red-50 p-3">
+              <p className="text-sm text-red-700 flex items-center gap-2">
+                <AlertCircle className="h-4 w-4" />
+                {errors.submit}
+              </p>
             </div>
           )}
 
@@ -277,7 +289,7 @@ export default function Reschedule({ session, onClose, onSuccess }: ReschedulePr
             <Button
               onClick={onClose}
               variant="outline"
-              className="border-slate-700 text-slate-300 hover:bg-slate-800"
+              className="border-gray-300 text-gray-900 hover:bg-gray-100"
             >
               Cancel
             </Button>
@@ -286,7 +298,7 @@ export default function Reschedule({ session, onClose, onSuccess }: ReschedulePr
               disabled={isLoading}
               className="rounded-xl bg-blue-600 font-semibold text-white hover:bg-blue-700"
             >
-              {isLoading ? "Rescheduling..." : `Reschedulet`}    
+              {isLoading ? "Rescheduling..." : "Reschedule"}    
             </Button>
           </div>
         </CardContent>

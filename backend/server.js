@@ -9,8 +9,13 @@ const {resheduleBilledSession} = require('./controller/adjustment')
 const {getSessionsByDate} = require('./controller/session')
 
 
-app.use(cors())
+
 app.use(express.json())
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Bypass-Tunnel-Reminder'] 
+}));
 
 app.get('/',(req,res)=>{
    res.send("Hello World")

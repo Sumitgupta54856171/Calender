@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card"
+import { useToast, ToastContainer } from "../../components/ui/toast";
 import {
   Select,
   SelectContent,
@@ -30,6 +31,7 @@ import { Calendar } from "../../components/ui/calendar";
 import { format } from "date-fns";
 import { useGetSessionsQuery,useCreateSessionMutation } from "../../store/api";
 export default function SessionForm(){
+  const { toasts, addToast, removeToast } = useToast();
   const [formData, setFormData] = useState({
     tutorName: "",
     studentName: "",
@@ -44,6 +46,27 @@ export default function SessionForm(){
   });
 const [createSession,{isLoading,isError,isSuccess}] = useCreateSessionMutation();
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (isSuccess) {
+      addToast("Session created successfully!", "success");
+      setFormData({
+        tutorName: "",
+        studentName: "",
+        subject: "",
+        sessionCost: "",
+        recurrencePattern: "",
+        date: null,
+        startTime: "",
+        endTime: "",
+        bill_status: "",
+        originalSessionId: "",
+      });
+    }
+    if (isError) {
+      addToast("Failed to create session. Please try again.", "error");
+    }
+  }, [isSuccess, isError]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -129,6 +152,7 @@ const payloadForBackend = {
   }
 
     return(<>
+    <ToastContainer toasts={toasts} onRemove={removeToast} />
     <div className="max-h-full w-screen justify-center" >
        <form onSubmit={submitHandler}>
         <Card className="m-10">
