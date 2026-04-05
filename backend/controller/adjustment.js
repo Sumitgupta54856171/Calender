@@ -13,7 +13,6 @@ const resheduleBilledSession =async (req, res, next) => {
       new_end_time 
     } = req.body;
 
-    // Log received values for debugging
     console.log("Reschedule request received:", {
       session_id,
       new_session_date,
@@ -21,7 +20,6 @@ const resheduleBilledSession =async (req, res, next) => {
       new_end_time
     });
 
-    // Validate datetime strings
     if (!new_start_time || !new_end_time) {
       return res.status(400).json({ success: false, message: "Start time and end time are required!" });
     }
@@ -29,7 +27,6 @@ const resheduleBilledSession =async (req, res, next) => {
     const newStartTimeDate = new Date(new_start_time);
     const newEndTimeDate = new Date(new_end_time);
 
-    // Validate that dates are valid
     if (isNaN(newStartTimeDate.getTime()) || isNaN(newEndTimeDate.getTime())) {
       return res.status(400).json({ 
         success: false, 
@@ -42,7 +39,6 @@ const resheduleBilledSession =async (req, res, next) => {
       newEndTimeDate
     });
 
-    // 1. Fetch Original Session
     const originalSession = await Session.findById(session_id);
     if (!originalSession) return res.status(404).json({ success: false, message: "Session not found!" });
     
@@ -67,16 +63,16 @@ const resheduleBilledSession =async (req, res, next) => {
       organization_id: organization_id,
       session_id: session_id,
       invoic_id: originalSession.invoice_id, 
-      credit_amount: originalSession.session_cost, // e.g., 200 Rupees
+      credit_amount: originalSession.session_cost, 
       type: 'credit',
       description: `Billed session rescheduled. Credit applied to original invoice.`
     });
 
     const newInvoice = await Invoice.create({
       organization_id: organization_id,
-      billingPeriod_start: newStartTimeDate, // Naye session ka start time
-      billingPeriod_end: newEndTimeDate,     // Naye session ka end time
-      total_amount: originalSession.session_cost, // e.g., 200 Rupees Debit
+      billingPeriod_start: newStartTimeDate, 
+      billingPeriod_end: newEndTimeDate,  
+      total_amount: originalSession.session_cost, 
       status: 'issued'
     });
 
