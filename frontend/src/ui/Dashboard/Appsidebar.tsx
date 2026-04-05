@@ -14,11 +14,11 @@ import { ArrowBigRight, CalendarDays, DollarSign, PlusCircle } from "lucide-reac
 
 export function AppSidebar({ header }: { header?: string }) {
   return (
-    <Sidebar className="bg-slate-950 text-slate-100">
-      <SidebarHeader className="border-b border-white/10 px-4 py-5">
+    <Sidebar className="bg-white text-gray-900 border-r border-gray-200">
+      <SidebarHeader className="border-b border-gray-200 px-4 py-5 bg-gray-50">
         <div className="space-y-1">
-          <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Tutor Scheduler</p>
-          <h2 className="text-lg font-semibold leading-tight">
+          <p className="text-xs uppercase tracking-[0.3em] text-gray-500">Tutor Scheduler</p>
+          <h2 className="text-lg font-semibold leading-tight text-gray-900">
             {header || "Dashboard"}
           </h2>
         </div>
@@ -31,13 +31,13 @@ export function AppSidebar({ header }: { header?: string }) {
               <SidebarMenuButton asChild className="rounded-2xl">
                 <Link
                   to="/"
-                  className="flex items-center justify-between gap-2 px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                  className="flex items-center justify-between gap-2 px-4 py-3 text-sm font-medium text-gray-900 transition hover:bg-gray-100"
                 >
                   <span className="inline-flex items-center gap-2">
-                    <CalendarDays className="h-4 w-4 text-slate-300" />
+                    <CalendarDays className="h-4 w-4 text-gray-600" />
                     Dashboard
                   </span>
-                  <ArrowBigRight className="h-4 w-4 text-slate-400" />
+                  <ArrowBigRight className="h-4 w-4 text-gray-500" />
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -46,9 +46,9 @@ export function AppSidebar({ header }: { header?: string }) {
               <SidebarMenuButton asChild className="rounded-2xl">
                 <Link
                   to="/Adjustment"
-                  className="flex items-center gap-2 px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                  className="flex items-center gap-2 px-4 py-3 text-sm font-medium text-gray-900 transition hover:bg-gray-100"
                 >
-                  <DollarSign className="h-4 w-4 text-slate-300" />
+                  <DollarSign className="h-4 w-4 text-gray-600" />
                   Adjustment
                 </Link>
               </SidebarMenuButton>
@@ -58,9 +58,9 @@ export function AppSidebar({ header }: { header?: string }) {
               <SidebarMenuButton asChild className="rounded-2xl">
                 <Link
                   to="/Bills"
-                  className="flex items-center gap-2 px-4 py-3 text-sm font-medium text-slate-100 transition hover:bg-slate-800"
+                  className="flex items-center gap-2 px-4 py-3 text-sm font-medium text-gray-900 transition hover:bg-gray-100"
                 >
-                  <DollarSign className="h-4 w-4 text-slate-300" />
+                  <DollarSign className="h-4 w-4 text-gray-600" />
                   Bills
                 </Link>
               </SidebarMenuButton>
@@ -73,12 +73,12 @@ export function AppSidebar({ header }: { header?: string }) {
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild className="rounded-2xl bg-slate-900/95 text-slate-100 hover:bg-slate-800">
+              <SidebarMenuButton asChild className="rounded-2xl bg-blue-50 text-blue-900 hover:bg-blue-100 border border-blue-200">
                 <Link
                   to="/Session"
                   className="flex items-center gap-2 px-4 py-3 text-sm font-semibold"
                 >
-                  <PlusCircle className="h-4 w-4 text-slate-300" />
+                  <PlusCircle className="h-4 w-4 text-blue-600" />
                   New Session
                 </Link>
               </SidebarMenuButton>
@@ -87,10 +87,10 @@ export function AppSidebar({ header }: { header?: string }) {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="mt-auto border-t border-white/10 px-4 py-4 text-xs text-slate-500">
+      <SidebarFooter className="mt-auto border-t border-gray-200 px-4 py-4 text-xs text-gray-500 bg-gray-50">
         <div className="space-y-1">
           <p>Quick links for your schedule.</p>
-          <p className="text-slate-400">Open the sidebar from mobile to access navigation.</p>
+          <p className="text-gray-400">Open the sidebar from mobile to access navigation.</p>
         </div>
       </SidebarFooter>
     </Sidebar>
