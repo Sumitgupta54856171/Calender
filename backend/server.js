@@ -1,6 +1,6 @@
 const express = require("express")
 const app = express()
-require('dotenv').config
+require('dotenv').config()
 const {mongoconnect} = require("./config/mongoose")
 const {createSessionAndBill,getbills,getAdjustments} = require('./controller/bill')
 const cors = require("cors")
@@ -13,7 +13,7 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/',(req,res)=>{
-    return "Hello world"
+   res.send("Hello World")
 })
 app.post('/api/sessions',createSessionAndBill)
 app.get('/api/sessions/:organizationId',getsessions)
@@ -22,7 +22,7 @@ app.put('/api/sessions/reschedule',resheduleBilledSession)
 app.get('/api/bills/:organizationId',getbills)
 app.get('/api/adjustments/:organizationId',getAdjustments)
 
-PORT=3000
+PORT= process.env.port ||3000
 
 app.listen(PORT,'0.0.0.0',()=>{
 console.log(`server is start http://localhost:${PORT}`)
