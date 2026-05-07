@@ -97,7 +97,7 @@ export default function Reschedule({ session, onClose, onSuccess }: ReschedulePr
       const newEndDateTime = `${dateString}T${newEndTime}:00`;
 
       const rescheduleData = {
-        organization_id: "69d238682c6bf21474605183",
+        organization_id: "69fc09d98c998a9f02fce7cd",
         session_id: session._id,
         tutor_name: session.tutor_name,
         new_session_date: dateString,
