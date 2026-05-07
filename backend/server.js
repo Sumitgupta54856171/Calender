@@ -17,7 +17,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'Bypass-Tunnel-Reminder'] 
 }));
 
-app.get('/',(req,res)=>{
+app.get('/hello',(req,res)=>{
    res.send("Hello World")
 })
 app.post('/api/sessions',createSessionAndBill)
