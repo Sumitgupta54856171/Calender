@@ -124,7 +124,7 @@ const [createSession,{isLoading,isError,isSuccess}] = useCreateSessionMutation()
   };
 const payloadForBackend = {
   // 🔴 IMPORTANT: Multi-tenant app ke liye organization ID zaruri hai
-  organization_id: "69d238682c6bf21474605183", 
+  organization_id: "69fc09d98c998a9f02fce7cd", 
   
   //
   session_id: formData.originalSessionId, 
