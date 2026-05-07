@@ -14,7 +14,7 @@ export default function Adjustment(){
     
     const dateString = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '';
     const {data, isLoading, error} = useGetSessionbyDateQuery({
-        organizationId: '69d238682c6bf21474605183',
+        organizationId: '69fc09d98c998a9f02fce7cd',
         date: dateString
     }, { skip: !dateString });
 
