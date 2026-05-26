@@ -4,7 +4,7 @@ import {createApi,fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 export const apiSlice = createApi({
     reducerPath:'api',
     baseQuery:fetchBaseQuery({
-        baseUrl:'https://139.59.58.145.nip.io/api',
+        baseUrl:'https://168.144.75.174.nip.io/api',
     }),
     endpoints:(builder)=>({
         getSessions:builder.query({
